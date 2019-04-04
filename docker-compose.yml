@@ -49,6 +49,14 @@ services:
       - APP_KEY=${APP_KEY:-null}
       - APP_LOG=errorlog
       - DEBUG=false
+      - MAIL_DRIVER=smtp
+      - MAIL_HOST=maildev
+      - MAIL_PORT=25
+      - MAIL_USERNAME=null
+      - MAIL_PASSWORD=null
+      - MAIL_ADDRESS=notifications@example.com
+      - MAIL_NAME=Cachet Notifications
+      - MAIL_ENCRYPTION=null
     depends_on:
       - postgres
     restart: on-failure
