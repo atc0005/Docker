@@ -21,6 +21,10 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+      # Work around bind mount directory having a README.md file within by
+      # specifying a subdirectory of that path as where data should be stored
+      - PGDATA=/var/lib/postgresql/data/pgdata
     restart: always
 
   cachet:
