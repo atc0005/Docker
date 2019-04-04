@@ -1,14 +1,28 @@
 version: "3"
 
 services:
+
+  # https://github.com/djfarrelly/MailDev/blob/master/docs/docker.md#docker-compose
+  maildev:
+    image: djfarrelly/maildev:1.0.0
+    ports:
+      - "1080:80"
+    networks:
+      - mail
+    restart: always
+
   postgres:
     image: postgres:9.5
     volumes:
-      - /var/lib/postgresql/data
+      # Create bind mount for data so that it will persist between test sessions
+      - ./db_data:/var/lib/postgresql/data
+    networks:
+      - db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     restart: always
+
   cachet:
     build:
       context: .
@@ -16,8 +30,10 @@ services:
         - cachet_ver=master
     ports:
       - 80:8000
-    links:
-      - postgres:postgres
+    networks:
+      - db
+      - mail
+      - web
     environment:
       - DB_DRIVER=pgsql
       - DB_HOST=postgres
@@ -32,3 +48,8 @@ services:
     depends_on:
       - postgres
     restart: on-failure
+
+networks:
+  db:
+  web:
+  mail:
